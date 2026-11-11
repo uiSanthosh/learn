@@ -1,0 +1,198 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    --font-heading: var(--font-sans);
+    --font-sans: var(--font-sans);
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar: var(--sidebar);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-chart-1: var(--chart-1);
+    --color-ring: var(--ring);
+    --color-input: var(--input);
+    --color-border: var(--border);
+    --color-destructive: var(--destructive);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-popover: var(--popover);
+    --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --color-foreground: var(--foreground);
+    --color-background: var(--background);
+    /* Radius scale: 4 / 8 / 8 / 16 / 24 / 32 */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 8px;
+    --radius-xl: 16px;
+    --radius-2xl: 24px;
+    --radius-3xl: 32px;
+    --radius-4xl: 40px;
+    --color-brand-light-greenish-blue: var(--brand-light-greenish-blue);
+    --color-brand-faded-poster: var(--brand-faded-poster);
+    --color-brand-green-darner-tail: var(--brand-green-darner-tail);
+    --color-brand-shy-moment: var(--brand-shy-moment);
+    --color-brand-city-lights: var(--brand-city-lights);
+    --color-brand-mint-leaf: var(--brand-mint-leaf);
+    --color-brand-robins-egg-blue: var(--brand-robins-egg-blue);
+    --color-brand-electron-blue: var(--brand-electron-blue);
+    --color-brand-exodus-fruit: var(--brand-exodus-fruit);
+    --color-brand-soothing-breeze: var(--brand-soothing-breeze);
+    --color-brand-sour-lemon: var(--brand-sour-lemon);
+    --color-brand-first-date: var(--brand-first-date);
+    --color-brand-pink-glamour: var(--brand-pink-glamour);
+    --color-brand-pico-8-pink: var(--brand-pico-8-pink);
+    --color-brand-american-river: var(--brand-american-river);
+    --color-brand-bright-yarrow: var(--brand-bright-yarrow);
+    --color-brand-orangeville: var(--brand-orangeville);
+    --color-brand-chi-gong: var(--brand-chi-gong);
+    --color-brand-prunus-avium: var(--brand-prunus-avium);
+    --color-brand-dracula-orchid: var(--brand-dracula-orchid);
+    --color-success: var(--success);
+    --color-warning: var(--warning);
+    --color-info: var(--info);
+    /* Spacing: 8px grid (Tailwind unit 2 = 8px; use 1,2,4,6,8...) */
+    --spacing: 4px;
+    /* Type scale on a 4/8px baseline: 12/16, 14/24, 16/24, 20/32, 24/32, 32/40, 40/48 */
+    --text-xs: 0.75rem;
+    --text-xs--line-height: 1rem;
+    --text-sm: 0.875rem;
+    --text-sm--line-height: 1.5rem;
+    --text-base: 1rem;
+    --text-base--line-height: 1.5rem;
+    --text-lg: 1.25rem;
+    --text-lg--line-height: 2rem;
+    --text-xl: 1.5rem;
+    --text-xl--line-height: 2rem;
+    --text-2xl: 2rem;
+    --text-2xl--line-height: 2.5rem;
+    --text-3xl: 2.5rem;
+    --text-3xl--line-height: 3rem;
+}
+
+:root {
+    /* Brand palette (flat UI "American" set) */
+    --brand-light-greenish-blue: #55efc4;
+    --brand-faded-poster: #81ecec;
+    --brand-green-darner-tail: #74b9ff;
+    --brand-shy-moment: #a29bfe;
+    --brand-city-lights: #dfe6e9;
+    --brand-mint-leaf: #00b894;
+    --brand-robins-egg-blue: #00cec9;
+    --brand-electron-blue: #0984e3;
+    --brand-exodus-fruit: #6c5ce7;
+    --brand-soothing-breeze: #b2bec3;
+    --brand-sour-lemon: #ffeaa7;
+    --brand-first-date: #fab1a0;
+    --brand-pink-glamour: #ff7675;
+    --brand-pico-8-pink: #fd79a8;
+    --brand-american-river: #636e72;
+    --brand-bright-yarrow: #fdcb6e;
+    --brand-orangeville: #e17055;
+    --brand-chi-gong: #d63031;
+    --brand-prunus-avium: #e84393;
+    --brand-dracula-orchid: #2d3436;
+
+    --background: #ffffff;
+    --foreground: var(--brand-dracula-orchid);
+    --card: #ffffff;
+    --card-foreground: var(--brand-dracula-orchid);
+    --popover: #ffffff;
+    --popover-foreground: var(--brand-dracula-orchid);
+    --primary: var(--brand-exodus-fruit);
+    --primary-foreground: #ffffff;
+    --secondary: var(--brand-city-lights);
+    --secondary-foreground: var(--brand-dracula-orchid);
+    --muted: color-mix(in srgb, var(--brand-city-lights) 55%, white);
+    --muted-foreground: var(--brand-american-river);
+    --accent: color-mix(in srgb, var(--brand-shy-moment) 25%, white);
+    --accent-foreground: var(--brand-dracula-orchid);
+    --destructive: var(--brand-chi-gong);
+    --success: var(--brand-mint-leaf);
+    --warning: var(--brand-bright-yarrow);
+    --info: var(--brand-electron-blue);
+    --border: var(--brand-city-lights);
+    --input: var(--brand-soothing-breeze);
+    --ring: var(--brand-exodus-fruit);
+    --chart-1: var(--brand-exodus-fruit);
+    --chart-2: var(--brand-electron-blue);
+    --chart-3: var(--brand-mint-leaf);
+    --chart-4: var(--brand-pico-8-pink);
+    --chart-5: var(--brand-bright-yarrow);
+    --radius: 0.5rem; /* 8px base */
+    --sidebar: #ffffff;
+    --sidebar-foreground: var(--brand-dracula-orchid);
+    --sidebar-primary: var(--brand-exodus-fruit);
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: var(--muted);
+    --sidebar-accent-foreground: var(--brand-dracula-orchid);
+    --sidebar-border: var(--brand-city-lights);
+    --sidebar-ring: var(--brand-exodus-fruit);
+}
+
+.dark {
+    --background: var(--brand-dracula-orchid);
+    --foreground: #f5f7f8;
+    --card: color-mix(in srgb, var(--brand-dracula-orchid) 88%, white);
+    --card-foreground: #f5f7f8;
+    --popover: color-mix(in srgb, var(--brand-dracula-orchid) 88%, white);
+    --popover-foreground: #f5f7f8;
+    --primary: var(--brand-shy-moment);
+    --primary-foreground: var(--brand-dracula-orchid);
+    --secondary: color-mix(in srgb, var(--brand-dracula-orchid) 80%, white);
+    --secondary-foreground: #f5f7f8;
+    --muted: color-mix(in srgb, var(--brand-dracula-orchid) 85%, white);
+    --muted-foreground: var(--brand-soothing-breeze);
+    --accent: color-mix(in srgb, var(--brand-exodus-fruit) 35%, var(--brand-dracula-orchid));
+    --accent-foreground: #f5f7f8;
+    --destructive: var(--brand-pink-glamour);
+    --success: var(--brand-light-greenish-blue);
+    --warning: var(--brand-sour-lemon);
+    --info: var(--brand-green-darner-tail);
+    --border: rgb(255 255 255 / 12%);
+    --input: rgb(255 255 255 / 18%);
+    --ring: var(--brand-shy-moment);
+    --chart-1: var(--brand-shy-moment);
+    --chart-2: var(--brand-green-darner-tail);
+    --chart-3: var(--brand-light-greenish-blue);
+    --chart-4: var(--brand-pico-8-pink);
+    --chart-5: var(--brand-sour-lemon);
+    --sidebar: color-mix(in srgb, var(--brand-dracula-orchid) 88%, white);
+    --sidebar-foreground: #f5f7f8;
+    --sidebar-primary: var(--brand-shy-moment);
+    --sidebar-primary-foreground: var(--brand-dracula-orchid);
+    --sidebar-accent: var(--muted);
+    --sidebar-accent-foreground: #f5f7f8;
+    --sidebar-border: rgb(255 255 255 / 12%);
+    --sidebar-ring: var(--brand-shy-moment);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    }
+  body {
+    @apply bg-background text-foreground;
+    }
+  html {
+    @apply font-sans;
+    }
+}
