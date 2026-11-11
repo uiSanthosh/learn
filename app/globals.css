@@ -27,7 +27,6 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
@@ -126,8 +125,6 @@
   --secondary-foreground: var(--brand-dracula-orchid);
   --muted: color-mix(in srgb, var(--brand-city-lights) 55%, white);
   --muted-foreground: var(--brand-american-river);
-  --accent: color-mix(in srgb, var(--brand-shy-moment) 25%, white);
-  --accent-foreground: var(--brand-dracula-orchid);
   --destructive: var(--brand-chi-gong);
   --success: var(--brand-mint-leaf);
   --warning: var(--brand-bright-yarrow);
@@ -164,12 +161,6 @@
   --secondary-foreground: #f5f7f8;
   --muted: color-mix(in srgb, var(--brand-dracula-orchid) 85%, white);
   --muted-foreground: var(--brand-soothing-breeze);
-  --accent: color-mix(
-    in srgb,
-    var(--brand-exodus-fruit) 35%,
-    var(--brand-dracula-orchid)
-  );
-  --accent-foreground: #f5f7f8;
   --destructive: var(--brand-pink-glamour);
   --success: var(--brand-light-greenish-blue);
   --warning: var(--brand-sour-lemon);

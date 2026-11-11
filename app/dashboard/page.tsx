@@ -79,12 +79,15 @@ function Panel({
   children,
   className = "",
   scroll = false,
+  wide = false,
 }: {
   title: string
   children: React.ReactNode
   className?: string
   /** let wide content scroll sideways on narrow screens instead of being clipped */
   scroll?: boolean
+  /** fill the panel width instead of centering at the content's natural width */
+  wide?: boolean
 }) {
   return (
     <div className={`flex min-w-0 flex-col gap-3 ${className}`}>
@@ -96,7 +99,7 @@ function Panel({
           scroll ? "overflow-x-auto" : ""
         }`}
       >
-        <div className="max-w-full min-w-0">{children}</div>
+        <div className={`max-w-full min-w-0 ${wide ? "w-full" : ""}`}>{children}</div>
       </div>
     </div>
   )
@@ -332,7 +335,7 @@ export default function DashboardPage() {
                   <FilterTable />
                 </Panel>
               </Pair>
-              <Panel title="Supplier records">
+              <Panel title="Supplier records" wide>
                 <RecordsTable />
               </Panel>
             </Section>
@@ -356,7 +359,7 @@ export default function DashboardPage() {
                   <ToolChips />
                 </Panel>
               </Pair>
-              <Panel title="Workflow" scroll>
+              <Panel title="Workflow" scroll wide>
                 <Flowchart />
               </Panel>
             </Section>

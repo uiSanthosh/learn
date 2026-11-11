@@ -13,7 +13,7 @@
  * color used sparingly as a condiment.
  * ────────────────────────────────────────────────────────── */
 
-.bui {
+:root {
   /* surfaces — cool, blue-tinted neutrals */
   --page: oklch(0.985 0.001 286.376);
   --canvas: oklch(0.961 0.002 247.84);
@@ -66,7 +66,7 @@
   --shadow-inset-field: inset 0 1px 2px oklch(0 0 0 / 0.12);
 }
 
-.dark .bui {
+.dark {
   --page: oklch(0.209 0.004 264.477);
   --canvas: oklch(0.231 0.004 264.487);
   --surface: oklch(0.26 0.006 271.191);
@@ -586,7 +586,7 @@ a:focus-visible .animated-underline::after {
 }
 
 /* ── Brand mapping: Beautiful UI tokens → our palette ─────────── */
-.bui {
+:root {
   --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06);
   --shadow-md:
@@ -618,7 +618,7 @@ a:focus-visible .animated-underline::after {
   --tooltip-bg: var(--brand-dracula-orchid);
   --tooltip-border: color-mix(in srgb, var(--brand-dracula-orchid) 80%, white);
 }
-.dark .bui {
+.dark {
   --page: color-mix(in srgb, var(--brand-dracula-orchid) 94%, black);
   --canvas: var(--brand-dracula-orchid);
   --surface: color-mix(in srgb, var(--brand-dracula-orchid) 90%, white);
