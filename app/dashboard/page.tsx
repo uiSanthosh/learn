@@ -29,6 +29,7 @@ import StreamingText from "@/components/primitives/StreamingText"
 import TaskRows from "@/components/primitives/TaskRows"
 import ThinkingState from "@/components/primitives/ThinkingState"
 import ToolChips from "@/components/primitives/ToolChips"
+import { InteractionSounds, SoundToggle } from "@/components/interaction-sounds"
 import { getSessionUser, signOut } from "@/lib/auth"
 
 type User = { name: string; email: string }
@@ -125,6 +126,7 @@ export default function DashboardPage() {
 
   return (
     <div className="bui flex h-svh bg-canvas text-ink">
+      <InteractionSounds />
       {/* Sidebar */}
       <aside className="hidden h-full shrink-0 lg:block">
         <SidebarNav
@@ -155,6 +157,7 @@ export default function DashboardPage() {
             </p>
           </div>
           <div className="flex items-center gap-2">
+            <SoundToggle />
             <ValuePill tone="green">All systems normal</ValuePill>
             <EntityChip name={user.name} />
             <Button
