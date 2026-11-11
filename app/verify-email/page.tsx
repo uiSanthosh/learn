@@ -70,6 +70,7 @@ function VerifyForm() {
       >
         <MField data-invalid={!!error} className="items-center">
           <InputOTP
+            containerClassName="w-full"
             maxLength={6}
             value={code}
             onChange={(v) => {
@@ -79,9 +80,13 @@ function VerifyForm() {
             }}
             autoFocus
           >
-            <InputOTPGroup>
+            <InputOTPGroup className="w-full">
               {[0, 1, 2, 3, 4, 5].map((i) => (
-                <InputOTPSlot key={i} index={i} />
+                <InputOTPSlot
+                  key={i}
+                  index={i}
+                  className="h-12 flex-1 text-lg"
+                />
               ))}
             </InputOTPGroup>
           </InputOTP>

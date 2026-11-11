@@ -97,7 +97,7 @@ export default function SignInPage() {
             <PasswordInput
               id="password"
               autoComplete="current-password"
-              placeholder="••••••••"
+              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               aria-invalid={!!errors.password}

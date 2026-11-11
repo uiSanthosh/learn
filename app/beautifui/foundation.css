@@ -1,10 +1,6 @@
-
 /* shadow-plugin (flornkm) — smooth, layered shadow stacks. The unprefixed
  * entry maps them onto Tailwind's --shadow-xs…2xl scale; our semantic tokens
  * below build on those values so the whole app picks up the smooth shadows. */
-
-
-
 
 /* GENERIC FOUNDATION — tokens, @theme, base rules, the primitive-*
  * spacing utilities, and shared keyframes below are needed by EVERY
@@ -169,21 +165,11 @@
 
 /* ── base ─────────────────────────────────────────────── */
 
-
-
-
-
-
-
 /* ── interface hygiene (interfaces.dev cheat sheet) ────── */
 
 /* headings balance; descriptions avoid orphans (skip long-form — we have none) */
 
-
-
-
 /* underlines clear descenders */
-
 
 /* theme switches swap every token at once — freeze transitions so the flip
  * is one clean repaint instead of hundreds of mismatched color fades */
@@ -245,7 +231,8 @@
     -webkit-touch-callout: none;
   }
 
-  .primitive-showcase :is(input, textarea, [contenteditable="true"], pre, code) {
+  .primitive-showcase
+    :is(input, textarea, [contenteditable="true"], pre, code) {
     -webkit-user-select: text;
     user-select: text;
     -webkit-touch-callout: default;
@@ -276,11 +263,6 @@ label:has(input),
 a {
   cursor: pointer;
 }
-
-
-
-
-
 
 .animated-underline {
   position: relative;
@@ -377,10 +359,9 @@ a:focus-visible .animated-underline::after {
 
 /* The sidebar is one persistent 224px tree clipped by a 52px shell.
  * Every rail glyph remains centered at x=26 in both states. */
-  .records-footer-hint {
-    display: none;
-  }
-
+.records-footer-hint {
+  display: none;
+}
 
 /* ── filter table electric status colors ─────────────────── */
 
@@ -517,7 +498,11 @@ a:focus-visible .animated-underline::after {
  * ══════════════════════════════════════════════════════════ */
 .stream-tail {
   filter: blur(1.6px);
-  -webkit-mask-image: linear-gradient(to right, oklch(0 0 0) 20%, oklch(0 0 0 / 0.2));
+  -webkit-mask-image: linear-gradient(
+    to right,
+    oklch(0 0 0) 20%,
+    oklch(0 0 0 / 0.2)
+  );
   mask-image: linear-gradient(to right, oklch(0 0 0) 20%, oklch(0 0 0 / 0.2));
 }
 
@@ -577,10 +562,12 @@ a:focus-visible .animated-underline::after {
 
 /* pixel-grid loader — brighten plateau, staggered per cell */
 @keyframes pixel-on {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.15;
   }
-  18%, 42% {
+  18%,
+  42% {
     opacity: 1;
   }
   62% {
@@ -602,8 +589,10 @@ a:focus-visible .animated-underline::after {
 .bui {
   --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06);
-  --shadow-md: 0 4px 8px -2px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06);
-  --shadow-lg: 0 12px 24px -6px rgb(0 0 0 / 0.1), 0 4px 8px -4px rgb(0 0 0 / 0.06);
+  --shadow-md:
+    0 4px 8px -2px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06);
+  --shadow-lg:
+    0 12px 24px -6px rgb(0 0 0 / 0.1), 0 4px 8px -4px rgb(0 0 0 / 0.06);
   --page: color-mix(in srgb, var(--brand-city-lights) 22%, white);
   --canvas: color-mix(in srgb, var(--brand-city-lights) 50%, white);
   --surface: #fff;
@@ -639,7 +628,11 @@ a:focus-visible .animated-underline::after {
   --field: color-mix(in srgb, var(--brand-dracula-orchid) 84%, white);
   --ink: #f5f7f8;
   --ink-2: var(--brand-soothing-breeze);
-  --ink-3: color-mix(in srgb, var(--brand-american-river) 60%, var(--brand-soothing-breeze));
+  --ink-3: color-mix(
+    in srgb,
+    var(--brand-american-river) 60%,
+    var(--brand-soothing-breeze)
+  );
   --line: color-mix(in srgb, var(--brand-dracula-orchid) 82%, white);
   --line-strong: color-mix(in srgb, var(--brand-dracula-orchid) 74%, white);
   --line-soft: color-mix(in srgb, var(--brand-dracula-orchid) 88%, white);
@@ -647,9 +640,17 @@ a:focus-visible .animated-underline::after {
   --accent-ink: color-mix(in srgb, var(--brand-shy-moment) 70%, white);
   --accent-tint: color-mix(in srgb, var(--brand-shy-moment) 18%, transparent);
   --green: var(--brand-light-greenish-blue);
-  --green-tint: color-mix(in srgb, var(--brand-light-greenish-blue) 14%, transparent);
+  --green-tint: color-mix(
+    in srgb,
+    var(--brand-light-greenish-blue) 14%,
+    transparent
+  );
   --orange: var(--brand-bright-yarrow);
-  --orange-tint: color-mix(in srgb, var(--brand-bright-yarrow) 14%, transparent);
+  --orange-tint: color-mix(
+    in srgb,
+    var(--brand-bright-yarrow) 14%,
+    transparent
+  );
   --red: var(--brand-pink-glamour);
   --red-tint: color-mix(in srgb, var(--brand-pink-glamour) 14%, transparent);
 }

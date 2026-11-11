@@ -2,7 +2,9 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import { motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
+import { MenuIcon, MoonIcon, SunIcon, XIcon } from "lucide-react"
+import { useTheme } from "next-themes"
 import { toast } from "sonner"
 
 import { Button } from "@/components/atoms/Button"
@@ -76,20 +78,55 @@ function Panel({
   title,
   children,
   className = "",
+  scroll = false,
 }: {
   title: string
   children: React.ReactNode
   className?: string
+  /** let wide content scroll sideways on narrow screens instead of being clipped */
+  scroll?: boolean
 }) {
   return (
     <div className={`flex min-w-0 flex-col gap-3 ${className}`}>
       <h3 className="text-xs font-medium tracking-wide text-ink-3 uppercase">
         {title}
       </h3>
-      <div className="min-w-0 rounded-card bg-surface p-4 shadow-card">
-        {children}
+      <div
+        className={`flex min-w-0 flex-1 justify-center rounded-card bg-surface p-3 shadow-card sm:p-4 ${
+          scroll ? "overflow-x-auto" : ""
+        }`}
+      >
+        <div className="max-w-full min-w-0">{children}</div>
       </div>
     </div>
+  )
+}
+
+/** Two-column grid on desktop; panels size to their content so nothing stretches into empty space. */
+function Pair({ children }: { children: React.ReactNode }) {
+  return <div className="grid items-start gap-6 lg:grid-cols-2">{children}</div>
+}
+
+function ThemeToggle() {
+  const { resolvedTheme, setTheme } = useTheme()
+  const [mounted, setMounted] = React.useState(false)
+  React.useEffect(() => {
+    // next-themes only knows the theme on the client.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true)
+  }, [])
+  const dark = mounted && resolvedTheme === "dark"
+  return (
+    <button
+      type="button"
+      data-sound="tick"
+      aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+      title="Toggle theme (D)"
+      onClick={() => setTheme(dark ? "light" : "dark")}
+      className="flex size-8 shrink-0 items-center justify-center rounded-full text-ink-2 shadow-btn transition-colors hover:bg-hover"
+    >
+      {dark ? <SunIcon className="size-4" /> : <MoonIcon className="size-4" />}
+    </button>
   )
 }
 
@@ -97,6 +134,8 @@ export default function DashboardPage() {
   const router = useRouter()
   const [user, setUser] = React.useState<User | null>(null)
   const [active, setActive] = React.useState("overview")
+  const [menuOpen, setMenuOpen] = React.useState(false)
+  const tabsRef = React.useRef<HTMLElement>(null)
 
   React.useEffect(() => {
     const u = getSessionUser()
@@ -120,23 +159,43 @@ export default function DashboardPage() {
     return () => obs.disconnect()
   }, [user])
 
+  React.useEffect(() => {
+    // Scroll only the tab strip. scrollIntoView() would also scroll the page sideways.
+    const nav = tabsRef.current
+    const tab = nav?.querySelector<HTMLElement>(`[data-tab="${active}"]`)
+    if (!nav || !tab) return
+    nav.scrollTo({
+      left: tab.offsetLeft - (nav.clientWidth - tab.offsetWidth) / 2,
+      behavior: "smooth",
+    })
+  }, [active])
+
+  React.useEffect(() => {
+    if (!menuOpen) return
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false)
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [menuOpen])
+
   if (!user) return null
 
   const firstName = user.name.split(" ")[0]
+  const handleSignOut = () => {
+    signOut()
+    toast.success("Signed out")
+    router.push("/signin")
+  }
 
   return (
     <div className="bui flex h-svh bg-canvas text-ink">
       <InteractionSounds />
-      {/* Sidebar */}
+
+      {/* Sidebar (desktop) */}
       <aside className="hidden h-full shrink-0 lg:block">
         <SidebarNav
           fill
           footerLabel="Sign out"
-          onFooterClick={() => {
-            signOut()
-            toast.success("Signed out")
-            router.push("/signin")
-          }}
+          onFooterClick={handleSignOut}
           onNewChat={() =>
             document
               .getElementById("chat")
@@ -145,30 +204,90 @@ export default function DashboardPage() {
         />
       </aside>
 
+      {/* Sidebar (mobile drawer) */}
+      <AnimatePresence>
+        {menuOpen && (
+          <div className="fixed inset-0 z-50 lg:hidden">
+            <motion.button
+              type="button"
+              aria-label="Close menu"
+              data-sound-silent
+              className="absolute inset-0 bg-black/40"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMenuOpen(false)}
+            />
+            <motion.div
+              className="absolute inset-y-0 left-0 bg-canvas shadow-overlay"
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", stiffness: 400, damping: 40 }}
+            >
+              <SidebarNav
+                fill
+                footerLabel="Sign out"
+                onFooterClick={handleSignOut}
+                onNewChat={() => {
+                  setMenuOpen(false)
+                  document
+                    .getElementById("chat")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }}
+              />
+              <button
+                type="button"
+                data-sound="release"
+                aria-label="Close menu"
+                onClick={() => setMenuOpen(false)}
+                className="absolute top-3 right-[-44px] flex size-8 items-center justify-center rounded-full bg-surface text-ink shadow-btn"
+              >
+                <XIcon className="size-4" />
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Top bar */}
-        <header className="flex shrink-0 flex-wrap items-center justify-between gap-4 border-b border-line bg-surface px-6 py-4">
-          <div className="min-w-0">
-            <h1 className="truncate text-lg font-semibold">
-              Good to see you, {firstName} <span aria-hidden>👋</span>
+        <header className="flex shrink-0 items-center gap-3 border-b border-line bg-surface px-4 py-3 sm:px-6 sm:py-4">
+          <button
+            type="button"
+            data-sound="press"
+            aria-label="Open menu"
+            onClick={() => setMenuOpen(true)}
+            className="flex size-8 shrink-0 items-center justify-center rounded-full text-ink-2 shadow-btn transition-colors hover:bg-hover lg:hidden"
+          >
+            <MenuIcon className="size-4" />
+          </button>
+          <div className="min-w-0 flex-1">
+            <h1 className="truncate text-base font-semibold sm:text-lg">
+              <span className="sm:hidden">Hi, {firstName}</span>
+              <span className="hidden sm:inline">
+                Good to see you, {firstName}
+              </span>{" "}
+              <span aria-hidden>👋</span>
             </h1>
             <p className="truncate text-sm text-ink-2">
               <Shimmer>Creamery Ops agent is monitoring 12 suppliers</Shimmer>
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
+            <span className="hidden sm:inline-flex">
+              <ValuePill tone="green">All systems normal</ValuePill>
+            </span>
+            <span className="hidden md:inline-flex">
+              <EntityChip name={user.name} />
+            </span>
             <SoundToggle />
-            <ValuePill tone="green">All systems normal</ValuePill>
-            <EntityChip name={user.name} />
+            <ThemeToggle />
             <Button
               variant="secondary"
               size="sm"
               className="lg:hidden"
-              onClick={() => {
-                signOut()
-                toast.success("Signed out")
-                router.push("/signin")
-              }}
+              onClick={handleSignOut}
             >
               Sign out
             </Button>
@@ -177,13 +296,16 @@ export default function DashboardPage() {
 
         {/* Section tabs */}
         <nav
-          className="flex shrink-0 gap-1 overflow-x-auto border-b border-line bg-surface px-6 py-2"
+          ref={tabsRef}
+          className="flex shrink-0 [scrollbar-width:none] gap-1 overflow-x-auto border-b border-line bg-surface px-4 py-2 sm:px-6 [&::-webkit-scrollbar]:hidden"
           aria-label="Sections"
         >
           {SECTIONS.map((s) => (
             <a
               key={s.id}
               href={`#${s.id}`}
+              data-tab={s.id}
+              aria-current={active === s.id ? "true" : undefined}
               className={`rounded-full px-3 py-1 text-sm whitespace-nowrap transition-colors ${
                 active === s.id
                   ? "bg-accent-tint text-accent-ink"
@@ -196,15 +318,20 @@ export default function DashboardPage() {
         </nav>
 
         <main className="flex-1 overflow-y-auto scroll-smooth">
-          <div className="mx-auto flex max-w-6xl flex-col gap-12 px-6 py-8">
+          <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-6 sm:gap-12 sm:px-6 sm:py-8">
             <Section
               id="overview"
               title="Overview"
               description="Sales, stock and supplier health at a glance."
             >
-              <Panel title="Insights">
-                <InsightCards />
-              </Panel>
+              <Pair>
+                <Panel title="Insights">
+                  <InsightCards />
+                </Panel>
+                <Panel title="Filter table" scroll>
+                  <FilterTable />
+                </Panel>
+              </Pair>
               <Panel title="Supplier records">
                 <RecordsTable />
               </Panel>
@@ -215,7 +342,7 @@ export default function DashboardPage() {
               title="Agent activity"
               description="What your agent is doing right now, and how it got there."
             >
-              <div className="grid gap-6 lg:grid-cols-2">
+              <Pair>
                 <Panel title="Loading state">
                   <LoadingState />
                 </Panel>
@@ -228,8 +355,8 @@ export default function DashboardPage() {
                 <Panel title="Tool calls">
                   <ToolChips />
                 </Panel>
-              </div>
-              <Panel title="Workflow">
+              </Pair>
+              <Panel title="Workflow" scroll>
                 <Flowchart />
               </Panel>
             </Section>
@@ -239,24 +366,24 @@ export default function DashboardPage() {
               title="Assistant"
               description="Ask questions, get sourced answers, and send follow-ups."
             >
-              <div className="grid gap-6 lg:grid-cols-2">
+              <Pair>
                 <Panel title="Chat">
                   <ChatComposer />
                 </Panel>
                 <Panel title="Streaming answer">
                   <StreamingText />
                 </Panel>
-              </div>
-              <Panel title="Prompt bar">
-                <PromptBar
-                  onSend={() =>
-                    toast.info("Demo prompt bar: nothing was sent.")
-                  }
-                />
-              </Panel>
-              <Panel title="Retrieved context">
-                <ContextCards />
-              </Panel>
+                <Panel title="Prompt bar">
+                  <PromptBar
+                    onSend={() =>
+                      toast.info("Demo prompt bar: nothing was sent.")
+                    }
+                  />
+                </Panel>
+                <Panel title="Retrieved context">
+                  <ContextCards />
+                </Panel>
+              </Pair>
             </Section>
 
             <Section
@@ -264,7 +391,7 @@ export default function DashboardPage() {
               title="Decisions"
               description="Human-in-the-loop approvals and agent recommendations."
             >
-              <div className="grid gap-6 lg:grid-cols-2">
+              <Pair>
                 <Panel title="Approval">
                   <ApprovalCard
                     onSubmitted={() => toast.success("Answers submitted")}
@@ -273,7 +400,7 @@ export default function DashboardPage() {
                 <Panel title="Recommendation">
                   <RecommendationCard />
                 </Panel>
-              </div>
+              </Pair>
             </Section>
 
             <Section
@@ -281,17 +408,14 @@ export default function DashboardPage() {
               title="Data"
               description="Search, filter and review proposed changes."
             >
-              <div className="grid gap-6 lg:grid-cols-2">
+              <Pair>
                 <Panel title="Search">
                   <SearchList />
                 </Panel>
-                <Panel title="Filter table">
-                  <FilterTable />
+                <Panel title="Proposed edits" scroll>
+                  <DiffTable />
                 </Panel>
-              </div>
-              <Panel title="Proposed edits">
-                <DiffTable />
-              </Panel>
+              </Pair>
             </Section>
 
             <Section
@@ -299,16 +423,16 @@ export default function DashboardPage() {
               title="Build"
               description="Tune the agent, review code, and act on selected text."
             >
-              <div className="grid gap-6 lg:grid-cols-2">
+              <Pair>
                 <Panel title="Fine-tune">
                   <FineTuneCard />
                 </Panel>
-                <Panel title="Selection actions">
-                  <SelectionActions />
+                <Panel title="Code" scroll>
+                  <CodeBlock />
                 </Panel>
-              </div>
-              <Panel title="Code">
-                <CodeBlock />
+              </Pair>
+              <Panel title="Selection actions" scroll>
+                <SelectionActions />
               </Panel>
             </Section>
           </div>

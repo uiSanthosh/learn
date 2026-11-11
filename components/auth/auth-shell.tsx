@@ -24,7 +24,7 @@ export function AuthShell({
   footer?: React.ReactNode
 }) {
   return (
-    <main className="relative flex min-h-svh flex-col items-center justify-center gap-6 overflow-hidden bg-muted p-6 dark:bg-background">
+    <main className="relative flex min-h-svh flex-col items-center justify-start gap-6 overflow-hidden bg-muted px-4 pt-12 pb-12 sm:px-6 sm:pt-[12svh] dark:bg-background">
       {/* Soft brand glows */}
       <div
         aria-hidden
