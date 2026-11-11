@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "./beautifui/foundation.css";
+@import "./beautifui/records-table.css";
+@import "./beautifui/sidebar-nav.css";
 
 @custom-variant dark (&:is(.dark *));
 

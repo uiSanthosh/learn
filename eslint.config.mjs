@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Vendored Beautiful UI components (MIT) - kept as published.
+    "components/primitives/**",
+    "components/atoms/**",
   ]),
 ]);
 
